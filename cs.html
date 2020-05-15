@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<script>
+
+	 // call和apply(数组)
+function AA() {
+    this.name = "a";
+    this.say = function () {
+        console.log("my name is" +" "+ this.name)
+    }
+}
+function BB() {
+    this.name = "b";
+}
+var aa = new AA();
+var bb = new BB();
+    aa.say.apply(bb); // my name is bb
+ 
+    // bb调用aa的方法
+
+    var number = [5, 1, 4, 2, 6, 3]
+
+
+    console.log(number.sort())
+
+ function tt(){
+ 	return this
+ }
+ function tt2(){
+ 	return tt()
+ }
+ console.log(tt());//window
+ console.log(tt2());//window
+
+ function ttt(){
+ 	var age='ss1';
+ 	return this.age
+ }
+ function ttt2(){
+ 	var age='ss2';
+ 	return tt()
+ }
+ console.log(ttt());//undefined
+ console.log(ttt2());//window
+
+	class Chameleon {
+	  static colorChange(newColor) {
+	    this.newColor = newColor;
+	  }
+	
+	  constructor({ newColor = "green" } = {}) {
+	    this.newColor = newColor;
+	  }
+	}
+	const freddie = new Chameleon({ newColor: "purple" });
+	 // console.log(freddie.colorChange("orange"));
+
+	function Person(firstName, lastName) {
+	  this.firstName = firstName;
+	  this.lastName = lastName;
+	}
+	const member = new Person("Lydia", "Hallie");
+
+	// Person.prototype.getFullName = () => this.firstName + this.lastName;//NaN
+	Person.prototype.getFullName = function () {
+	  // return this.firstName+' '+this.lastName;
+	  return `${this.firstName} ${this.lastName}`;
+	}
+	console.log(member.getFullName());
+
+
+	function getPersonInfo(one, two, three) {
+	  console.log(one);
+	  console.log(two);
+	  console.log(three);
+	}	
+	const person = "Lydia";
+	const age = 21;
+	getPersonInfo`${person} is ${age} years old`;
+
+
+	function B() {  this.name = "b"; }
+    var b1 = new B();
+    console.log(b1.toString()); //[object Object]
+
+	console.log('\n\n')
+	function Foo() {
+        getName = function () { console.log(1); };
+        //this.getName = function () { console.log (1); };
+        return this;
+    }
+    // console.log(Foo());
+    Foo.getName = function () { console.log(2);};
+    Foo.prototype.getName = function () { console.log(3);};
+
+    var getName = function () { console.log(4);};
+    function getName() { console.log(5);}
+
+    Foo.getName();//2
+    getName();//4
+    Foo().getName();//1
+    getName();//1
+    new Foo.getName();//2
+    new Foo().getName();//3
+    new new Foo().getName();//3 new((new Foo()).getName)()
+// new new new Foo().getName();//3
+
+</script>
+
+<div style="width: 200px;height: 200px;background: red" onclick="console.log('first div')">
+	  <div style="width: 100px;height: 100px;background: blue"  onclick="console.log('second div')">
+	    <button onclick="console.log('button')">
+	      Click!
+	    </button>
+	  </div>
+</div>
+
+
+<script>
+	console.log([..."Lydia"])
+	console.log([..."Lydiaay"])
+
+
+function getInfo(member,year){
+		member.name = "Lydia";
+		year = "1998";
+		console.log(member.name+year)
+	}
+	
+
+
+var a78 = 100;  
+function test(){  
+   	 var a78 = 10;  //去掉了var 就变成定义了全局变量了
+}  
+test();
+console.log(a78)
+
+function Car(){
+		this.make = "AAA";
+		// return { make:"BBB" };
+	}
+	const myCar = new Car();
+	console.log(myCar.make);
+
+	(() => {
+		let x = (y = 10);
+	})();
+	console.log(typeof undefined);
+	console.log(typeof y);
+
+
+	const set = new Set([1,1,2,3,4]);
+	console.log(set);
+	console.log([...new Set([1,1,2,1,2,5])]);
+
+
+
+	console.log(Number(2) === Number(2))
+	console.log(Boolean(false) === Boolean(false))
+	console.log(Symbol('foo') === Symbol('foo'))
+
+const box = { x: 10, y: 20 };
+
+Object.freeze(box);
+
+const shape = box;
+shape.x = 100;
+console.log(shape)
+
+
+
+var status = "?1"
+
+setTimeout(() => {
+  const status = "?2"
+
+  const data = {
+    status: "?3",
+    getStatus() {
+      return this.status
+    }
+  }
+
+  console.log(data.getStatus())//3
+  console.log(data.getStatus.call(this))//1
+}, 0)
+
+
+function checkAge(age) {
+  if (age < 18) {
+    const message = "Sorry, you're too young."
+  } else {
+    const message = "Yay! You're old enough!"
+  }
+  return message
+}
+console.log(checkAge(21))
+
+
+	
+
+</script>
+</body>
+</html>
