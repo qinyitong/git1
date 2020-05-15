@@ -1,0 +1,10 @@
+0. 配置(安装后在开始菜单里面找到 "Git --> Git Bash" )：：
+	$ git config --global user.name "qinyitong"
+	$ git config --global user.email "178886876@qq.com"
+
+
+1. 创建版本库(自己创建一个文件，右键git bash)::
+	git init                             //把这个目录变成git可以管理的仓库
+	git add  readme.txt                       //将新增/修改文件 添加到暂存区里面去
+	git commit -m 'readme.txt提交'    //把文件提交到仓库 ‘注释’
+	git status                                        //来查看是否还有文件未提交
