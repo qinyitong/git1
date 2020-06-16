@@ -1,22 +1,38 @@
-0. 配置(安装后在开始菜单里面找到 "Git --> Git Bash" )：：
+0. 配置(安装后在开始菜单里面找到 "Git --> Git Bash" )(Git 为你的每一个提交都记录你的名字与电子邮箱地址，所以第一步需要配置用户名和邮箱地址。)：：
 	$ git config --global user.name "qinyitong"
 	$ git config --global user.email "178886876@qq.com"
 
 
 1. 创建版本库(自己创建一个文件，右键git bash)::
-	git init                                           //把这个目录变成git可以管理的仓库
+	git init                                              //把这个目录变成git可以管理的仓库
+	
+	git add .                                           //命令来添加当前项目的所有文件
+	git add *.c                                        //将目录下以 .c 结尾的添加到暂存区里面去
+	   git add  readme.txt                       //将新增/修改文件 添加到暂存区里面去
+	   git add README hello.php          
+ 
+	git commit -m 'readme.txt提交'    //把文件提交到仓库 ‘注释’（可以使用git commit一次性提交到分支上）
+	
+	git status                              //查看项目的当前状态，看是否还有文件未提交
+	git status -s                          //（加了 -s 参数，以获得简短的结果输出。如果没加该参数会详细输出内容）
+	
+	git diff                                //来查看执行 git status 的结果的详细信息。(尚未缓存的改动：)
+	git diff --cached                 //查看已缓存的改动： 
+	git diff HEAD                     // 查看已缓存的与未缓存的所有改动：git diff HEAD
+	diff：git diff --stat             //显示摘要而非整个 diff：git diff --stat
+	git diff readme.txt             //看下readme.txt文件到底改了什么内容
 
-	git add *.c                                      //将目录下以 .c 结尾的添加到暂存区里面去
-	1.git add  readme.txt                       //将新增/修改文件 添加到暂存区里面去
-	git add README hello.php           
-	2.git commit -m 'readme.txt提交'    //把文件提交到仓库 ‘注释’（可以使用git commit一次性提交到分支上）
-	git status                                        //来查看是否还有文件未提交
-
-	git diff readme.txt                         //看下readme.txt文件到底改了什么内容
+	git commit -a   //如果你觉得 git add 提交缓存的流程太过繁琐，Git 也允许你用 -a 选项跳过这一步（git commit -am '修改 hello.php 文件'）。
 
 2.版本回退：：
-	git log                                             //查看下修改历史记录 （版本号）
+	git log                                             //查看下修改历史记录 （版本号）（使用 git log 命令列出历史提交记录）
 	git log –pretty=oneline                  //查看简明修改历史记录
+	git log --oneline                             //查看历史记录的简洁的版本
+	git log --graph 		       //查看历史中什么时候出现了分支、合并
+	git log --reverse --oneline             //逆向显示所有日志
+	git log --author=Linus --oneline -5   //查找指定用户的提交日志
+	git log --oneline --before={3.weeks.ago} --after={2010-04-18} --no-merges  // --no-merges 选项以隐藏合并提交
+				       //指定日期，可以执行几个选项：--since 和 --before，但是你也可以用 --until 和 --after。
 
 	git reset --hard HEAD^                   //回退到上个版本
 	git reset --hard HEAD^^                 //回退到上上个版本
@@ -24,13 +40,19 @@
 	git reset --hard 版本号                      //回退到某个版本（参数：6fcfc89）
 
 3.撤销修改和删除文件：：
+	git reset HEAD hello.php                //用于取消已缓存的内容(取消之前 git add 添加，但不希望包含在下一提交快照中的缓存)
 	1）git reset --hard HEAD^
 	2）git checkout -- readme.txt           //把readme.txt文件在工作区做的修改全部撤销，-- 很重要，如果没有 -- 的话，那么命令变成创建分支了
-
-	rm b.txt                                              //删掉文件b.txt
+	git rm <file>                 //从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除，然后提交
+	git rm -f <file>             //如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 -f
+	git rm --cached <file>  //把文件从暂存区域移除，但仍然希望保留在当前工作目录中
+	git rm –r *                    //进入某个目录中，执行此语句，会删除该目录下的所有文件和子目录
+	rm b.txt                        //删掉文件b.txt
+重命名：：
+	git mv README  README.md  //git mv 命令用于移动或重命名一个文件、目录、软连接。
 
 5.远程仓库：：
-	
+	git remote add [shortname] [url]           //添加一个新的远程仓库
 	git remote add origin https://github.com/qinyitong/git1.git
 	git push -u origin master                    //把本地仓库分支master内容推送到元仓库（把本地库的内容推送到远程，使用 git push命令，实际上是把当前分支master推送到远程。第一次推送master分支时，加上了 –u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。推送成功后，可以立刻在github页面中看到远程库的内容已经和本地一模一样了，）    
 	git push origin master                          //从现在起，只要本地作了提交，就可以通过命令提交     
@@ -42,29 +64,50 @@
 	
 	git clone <repo>                                  //从现有 Git 仓库中拷贝项目
 	 git clone <repo> <directory>             //克隆到指定的目录  （repo:Git 仓库；directory:本地目录 ）     
+
+	git remote rm [别名]                             // 删除远程仓库
+
 6.创建与合并分支：：
-	git cheakout dev                                   //创建dev分支
-	git cheakout -b dev                               //创建并切换分支dev
-	git branch                                              //查看当前的分支（查看分支，会列出所有的分支）
+	git branch                                              //查看分支：（查看分支，会列出所有的分支；* 该分支是当前分支）
+	git branch name                                    //创建分支：
 
-	git merge dev                                        //在master分支上合并dev分支内容
-
-	git branch -d dev                                   //删除dev分支
+	git checkout name                                //切换分支：
+	git checkout –b name                           //创建+切换分支：git cheakout -b dev 
+	git merge name                                    //合并某分支到当前分支：git merge dev 在master分支上合并dev分支内容
+	git branch –d name                              //删除分支：git branch -d dev
 
 	cat readme.txt                                       //查看readme.txt 文件内容
-	
-
-
-
-
 
 8.多人协作：：
 	git remote                                               //查看远程库的信息 
-	git remote   -v                                         //查看远程库的详细信息 
-
+	git remote   -v                                         //查看远程库的详细信息 （ -v 参数，你还可以看到每个别名的实际链接地址）
+	
 	git push origin master                            //推送分支 
+	git push [alias] [branch]                           //将你的 [branch] 分支推送成为 [alias] 远程仓库上的 [branch] 分支
+	
+	git fetch                  //从远程仓库下载新分支与数据：git fetch origin
+	git merge               //从远端仓库提取数据并尝试合并到当前分支：git merge origin/master
 
 
-9.
+9.标签：
+	git tag -a v1.0    //-a 选项意为"创建一个带注解的标签"。 不用 -a 选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解（如果你达到一个重要的阶段，并希望永远记住那个特别的提交快照，你可以使用 git tag 给它打上标签。
+
+比如说，我们想为我们的 runoob 项目发布一个"1.0"版本。 我们可以用 git tag -a v1.0 命令给最新一次提交打上（HEAD）"v1.0"的标签。）
+	git log --decorate          //查看我们的标签
+	git tag -a v0.9 85fc7e7  //假设我们发布了提交 85fc7e7，但是那时候忘了给它打标签，可以给它追加标签。。
+
+	git tag                                                                 //查看所有标签
+	git tag -a <tagname> -m "runoob.com标签"     //指定标签信息命令：
+	git tag -s <tagname> -m "runoob.com标签"     //PGP签名标签命令：
+
+
+
+
+
+
+
+
+
+
 
 
